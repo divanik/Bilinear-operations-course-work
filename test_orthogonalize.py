@@ -1,6 +1,6 @@
 import numpy as np
 import orthogonalize
-import contraction
+import primitives
 
 t0 = np.array([ [[4 , 5, 6], [-4, 7, 8], [1, -4, 5]] ])
 
@@ -37,6 +37,7 @@ tt = [t0, t1, t2]
 
 tt2 = orthogonalize.orthogonalizeRL(tt)
 
+'''
 print(tt[0].shape)
 print(tt[1].shape)
 print(tt[2].shape)
@@ -44,10 +45,15 @@ print(tt[2].shape)
 print(tt2[0].shape)
 print(tt2[1].shape)
 print(tt2[2].shape)
+'''
 
 U2 = orthogonalize.makeHorizontalUnfolding(tt2[2])
 U1 = orthogonalize.makeHorizontalUnfolding(tt2[1])
 
-print(U2 @ U2.T)
+#print(np.eye(U2.shape[0]) - U2 @ U2.T)
 
-print(U1 @ U1.T)
+assert( np.linalg.norm(np.eye(U2.shape[0]) - U2 @ U2.T, ord='fro') < 1e-10)
+
+assert( np.linalg.norm(np.eye(U1.shape[0]) - U1 @ U1.T, ord='fro') < 1e-10)
+
+assert(primitives.frob(primitives.countTensor(tt) - primitives.countTensor(tt2)) < 1e-10)

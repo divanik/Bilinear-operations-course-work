@@ -13,4 +13,8 @@ print(t2.shape)
 
 tt = [t0, t1, t2]
 
-print(contraction.PartialContractionsRL(tt, tt))
+tt2 = [t2, t1, t0]
+
+print(contraction.partialContractionsRL(tt, tt))
+
+print(contraction.partialContractionsLR(tt, tt))

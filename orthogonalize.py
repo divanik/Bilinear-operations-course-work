@@ -6,7 +6,6 @@ def makeHorizontalUnfolding(tensor : np.array):
     return np.reshape(np.einsum('ijk->ikj', tensor), (tensor.shape[0], -1), order='F')
 
 def fromHorizontalUnfolding(matrix : np.array, shape : typing.Tuple[int]):
-    print(shape[0])
     good_shape = (shape[0], shape[2], shape[1])
     return np.einsum('ijk->ikj', np.reshape(matrix, good_shape, order='F'))
 
@@ -19,7 +18,7 @@ def fromVerticalUnfolding(matrix : np.array, shape : typing.Tuple[int]):
 def orthogonalizeRL(tt_tensors : typing.List[np.array]):
     answer = tt_tensors.copy()
     for idx in range(len(tt_tensors) - 1, 0, -1):
-        print(idx)
+        #print(idx)
             #print(answer[idx].shape)
         tensor = answer[idx]
         y = makeHorizontalUnfolding(tensor)
