@@ -1,7 +1,7 @@
 from mimetypes import init
 import typing
 import numpy as np
-import primitives
+from bilinear_package.src import primitives
 
 def orthogonalizeRL(tt_tensors : typing.List[np.array]):
     answer = tt_tensors.copy()

@@ -1,8 +1,8 @@
 import typing
 import numpy as np
-import orthogonalize
-import contraction
-import primitives
+from bilinear_package.src import orthogonalize
+from bilinear_package.src import contraction
+from bilinear_package.src import primitives
 
 def ttRoundingWithRanks(tt_tensors : typing.List[np.array], desired_ranks : typing.List[int]):
     answer = orthogonalize.orthogonalizeRL(tt_tensors)
