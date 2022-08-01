@@ -4,11 +4,12 @@ import orthogonalize
 import contraction
 import primitives
 
-def ttRoundingWithRanks(tt_tensors : typing.List[np.array], desired_ranks : typing.List[int]):
+
+def ttRoundingWithRanks(tt_tensors: typing.List[np.array], desired_ranks: typing.List[int]):
     answer = orthogonalize.orthogonalizeRL(tt_tensors)
-    #print(answer[0].shape)
-    #print(answer[1].shape)
-    #print(answer[2].shape)
+    # print(answer[0].shape)
+    # print(answer[1].shape)
+    # print(answer[2].shape)
     for idx in range(len(answer) - 1):
         tensor = answer[idx]
         shape = tensor.shape
@@ -17,11 +18,11 @@ def ttRoundingWithRanks(tt_tensors : typing.List[np.array], desired_ranks : typi
         shape = (tensor.shape[0], tensor.shape[1], y.shape[1])
         answer[idx] = primitives.fromVerticalUnfolding(y, shape)
 
-        #print(tensor.shape)
-        #print(y.shape)
-        #print(r.shape)
-        #print(answer[idx].shape)
-        #print(r.shape)
+        # print(tensor.shape)
+        # print(y.shape)
+        # print(r.shape)
+        # print(answer[idx].shape)
+        # print(r.shape)
         U, S, Vt = np.linalg.svd(r, full_matrices=False)
         l = desired_ranks[idx]
         #print(l, U.shape, S.shape, Vt.shape)
@@ -38,7 +39,8 @@ def ttRoundingWithRanks(tt_tensors : typing.List[np.array], desired_ranks : typi
         answer[idx + 1] = np.einsum('ij,jkl->ikl', SVt, answer[idx + 1])
     return answer
 
-def orthogonalizeThenRandomize(tt_tensors : typing.List[np.array], desired_ranks : typing.List[int]):
+
+def orthogonalizeThenRandomize(tt_tensors: typing.List[np.array], desired_ranks: typing.List[int]):
     answer = orthogonalize.orthogonalizeRL(tt_tensors)
     #print(f'Q {answer}')
     for idx in range(len(answer) - 1):
@@ -46,25 +48,28 @@ def orthogonalizeThenRandomize(tt_tensors : typing.List[np.array], desired_ranks
         shape = tensor.shape
         z = primitives.makeVerticalUnfolding(tensor)
         #print(f'z {z}')
-        omega = np.random.normal(loc=0.0, scale = 1/(z.shape[1] *  desired_ranks[idx]), size = (z.shape[1], desired_ranks[idx]))  #there is a question about scale
+        omega = np.random.normal(loc=0.0, scale=1/(z.shape[1] * desired_ranks[idx]), size=(
+            z.shape[1], desired_ranks[idx]))  # there is a question about scale
         #print(f'Omega: {omega}')
         y = z @ omega
         #print(f'y {y}')
         v, _ = np.linalg.qr(y)
-        answer[idx] = primitives.fromVerticalUnfolding(v, (shape[0], shape[1], v.shape[1]))
+        answer[idx] = primitives.fromVerticalUnfolding(
+            v, (shape[0], shape[1], v.shape[1]))
         #print(f'v {v}')
         m = v.T @ z
         #print(f'm {m}')
-        #print()
+        # print()
         answer[idx + 1] = np.einsum('ij,jkl->ikl', m, answer[idx + 1])
     return answer
 
-def randomizeThenOrthogonalize(tt_tensors : typing.List[np.array], desired_ranks : typing.List[int]):
+
+def randomizeThenOrthogonalize(tt_tensors: typing.List[np.array], desired_ranks: typing.List[int]):
     modes = []
     for tt in tt_tensors:
         modes.append(tt.shape[1])
     random_tensor = primitives.createRandomTensor(modes, desired_ranks)
-    #print(random_tensor)
+    # print(random_tensor)
     contractions = contraction.partialContractionsRL(tt_tensors, random_tensor)
     answer = tt_tensors.copy()
     for idx in range(len(tt_tensors) - 1):
@@ -72,10 +77,12 @@ def randomizeThenOrthogonalize(tt_tensors : typing.List[np.array], desired_ranks
         shape = answer[idx].shape
         y = z @ contractions[idx]
         y, _ = np.linalg.qr(y)
-        answer[idx] = primitives.fromVerticalUnfolding(y, (shape[0], shape[1], y.shape[1]))
+        answer[idx] = primitives.fromVerticalUnfolding(
+            y, (shape[0], shape[1], y.shape[1]))
         m = y.T @ z
         answer[idx + 1] = np.einsum('ij, jkl->ikl', m, answer[idx + 1])
     return answer
+
 
 '''
 def twoSidedRandomization(tt_tensors : typing.List[np.array], 
