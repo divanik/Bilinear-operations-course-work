@@ -1,1 +1,2 @@
-from bilinear_package import src, tests
+from bilinear_package import src
+from bilinear_package import tests

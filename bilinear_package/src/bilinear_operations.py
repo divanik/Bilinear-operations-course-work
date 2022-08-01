@@ -1,8 +1,6 @@
 import typing
 import numpy as np
-
-import contraction
-import primitives
+from bilinear_package.src import contraction, primitives
 
 
 def roundingSumRandThenOrth(tt_tensors1: typing.List[np.array], tt_tensors2: typing.List[np.array], desired_ranks: typing.List[int]):

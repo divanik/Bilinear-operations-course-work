@@ -1,6 +1,6 @@
 import numpy as np
-from  bilinear_package.src import bilinear_operations
-from  bilinear_package.src import primitives
+from bilinear_package.src import bilinear_operations
+from bilinear_package.src import primitives
 
 t0 = np.array([ [[4 , 5, 6], [-4, 7, 8], [1, -4, 5]] ])
 
